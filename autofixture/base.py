@@ -2,7 +2,7 @@
 import warnings
 from django import VERSION
 from django.db.models import fields, ImageField
-from django.conf import settings
+from django.conf import settings, ImproperlyConfigured
 from django.db.models.fields import related
 from django.utils.six import with_metaclass
 
@@ -17,8 +17,11 @@ from autofixture.compat import (
     getargnames,
 )
 
-if 'django.contrib.gis' in settings.INSTALLED_APPS:
-    from django.contrib.gis.db.models import PointField
+try:
+    if 'django.contrib.gis' in settings.INSTALLED_APPS:
+        from django.contrib.gis.db.models import PointField
+except ImproperlyConfigured:
+    pass
 
 
 class CreateInstanceError(Exception):
